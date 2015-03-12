@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ title }} - oBlog</title>
+        <link rel="stylesheet" href="stylesheet/style.css">
+        <link href="favicon.ico" rel="icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        {% if canonical is defined %}
+        <link rel="canonical" href="{{ canonical }}" />
+        {% endif %}
+    </head>
+    <body>
+        {{ article | raw }}
+        <div id="right">
+        <aside>
+            <h3>About the oblog</h3>
+            <p>I'm a oblog</p>
+            <p>Powered by Oblog <a href="https://github.com/ospii/oblog">Oblog</a>
+            </ul>
+        </aside>
+        <nav>
+            <h3>Other poasts:</h3>
+            <ul>
+            {% for link in links %}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </nav>
+        </div>
+    </body>
+</html>

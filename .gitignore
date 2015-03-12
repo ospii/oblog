@@ -1,0 +1,5 @@
+composer.phar
+composer.lock
+vendor/
+example/document_root/sitemap.xml
+example/document_root/*.html
