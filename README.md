@@ -12,10 +12,19 @@ See the example site in `/example` directory. Sample has two public posts and on
 
     php gen.php
 
+**Warning! All files with `.html` extension in output directory will be deleted**
 
 First line of the source markdown file has several **magical** properties:
 
 * it will be used as part of the html filename eg. "Laihduta regexillä" would be named "laihduta-regexilla.html".
 * if it contains `+DRAFT+`, the post won't be added to link list nor `sitemap.xml` and is given a slightly obfuscated filename which is only shown during HTML generation.
 
-**Warning! All html prefixed files in output directory will be deleted**
+via Composer
+------------
+
+    {
+        "require": {
+            "ospii/oblog": "dev-master"
+        }
+    }
+
