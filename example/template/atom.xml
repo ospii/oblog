@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>{{ baseUrl }}</id>
+  <title>{{ name }}</title>
+  <updated>{{ "now"|date('c') }}</updated>
+  <author>
+{% if author.name is defined %}
+    <name>{{ author.name }}</name>
+{% endif %}
+{% if author.email is defined %}
+    <email>{{ author.email }}</email>
+{% endif %}
+  </author>
+{% for url in urls %}
+    <entry>
+        <id>{{ url.loc}}</id>
+        <updated>{{ url.updated }}</updated>
+        <title>{{ url.title }}</title>
+    </entry>
+{% endfor %}
+</feed>
