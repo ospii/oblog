@@ -10,6 +10,8 @@ if (php_sapi_name() === 'cli') {
         ->setOutputPath(__DIR__ .'/document_root')
         ->setTemplatePath(__DIR__ . '/template')
         ->setBaseUrl('http://example.com')
+        ->setName('Example Blog')
+        ->setAuthor('John Example', 'john@example.org')
         ->generateStaticPosts();
 }
 

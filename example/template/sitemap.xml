@@ -5,9 +5,9 @@
         <loc>{{url.loc}}</loc>
         <lastmod>{{ url.lastmod}}</lastmod>
         <priority>{{ url.priority}}</priority>
-        {% if url.changefreq is defined %}
+{% if url.changefreq is defined %}
         <changefreq>{{ url.changefreq }}</changefreq>
-        {% endif %}
+{% endif %}
     </url>
 {% endfor %}
 </urlset>

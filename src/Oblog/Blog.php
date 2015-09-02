@@ -24,6 +24,16 @@ class Blog
     private $baseUrl;
 
     /**
+     * @var Name of the blog/site
+     */
+    private $name;
+
+    /**
+     * @var Info for atom feed's author section
+     */
+    private $author = array('name' => null, 'email' => null);
+
+    /**
      * @param $baseUrl Base url for the site eg. http://example.com or http://example.com/blog
      * @return $this
      */
@@ -63,6 +73,30 @@ class Blog
     public function setOutputPath($path)
     {
         $this->outputPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * @param $name Name for the site/blog
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name Name of the author
+     * @param string $email Email for the author
+     * @return $this
+     */
+    public function setAuthor($name = null, $email = null)
+    {
+        $this->author['name'] = $name;
+        $this->author['email'] = $email;
 
         return $this;
     }
@@ -119,8 +153,8 @@ class Blog
            unlink($htmlFile);
         }
 
-        $loader = new \Twig_Loader_Filesystem($this->templatePath);
-        $twig = new \Twig_Environment($loader);
+        $twigLoader = new \Twig_Loader_Filesystem($this->templatePath);
+        $twig = new \Twig_Environment($twigLoader);
 
         $siteMapUrls = array();
         /* @var $post \Oblog\Post */
@@ -134,7 +168,8 @@ class Blog
             $pageVariables = array(
                 'article' => $postHtml,
                 'links' => $links,
-                'title' => $post->getTitle()
+                'title' => $post->getTitle(),
+                'baseUrl' => $this->baseUrl,
             );
 
             if ($key == $lastPostKey) {
@@ -154,12 +189,16 @@ class Blog
                 $siteMapUrls[] = array(
                     'loc' => $this->baseUrl . '/' . $outputFilename,
                     'priority' => 0.5,
-                    'lastmod' => date('Y-m-d', $post->getModifiedAt()));
+                    'lastmod' => date('Y-m-d', $post->getModifiedAt()),
+                    'title' => $post->getTitle(),
+                    'updated' => date('c', $post->getModifiedAt()),
+                    );
             } else {
                 echo PHP_EOL . 'DRAFT at ' . $this->baseUrl . '/' . $outputFilename;
             }
         }
 
+        $atomUrls = $siteMapUrls;
         if ($lastPostKey !== false) {
             $siteMapUrls[] = array(
                 'loc'        => $this->baseUrl . '/',
@@ -168,12 +207,27 @@ class Blog
                 'changefreq' => 'daily',
              );
         }
-        $siteMapVariables = array(
-            'baseurl' => $this->baseUrl,
-            'urls' => $siteMapUrls,
-        );
-        $sitemapXml = $twig->render('sitemap.xml', $siteMapVariables);
-        file_put_contents($this->outputPath . '/sitemap.xml', $sitemapXml);
+
+        if ($twigLoader->exists('sitemap.xml')) {
+            $sitemapXml = $twig->render('sitemap.xml', array(
+                'urls' => $siteMapUrls,
+            ));
+            $path = $this->outputPath . '/sitemap.xml';
+            file_put_contents($path, $sitemapXml);
+            echo PHP_EOL . "Sitemap generated to " . $path . ' ' . $this->baseUrl . '/' . basename($path);
+        }
+
+        if ($twigLoader->exists('atom.xml')) {
+            $atomFeed = $twig->render('atom.xml', array(
+                'urls' => $atomUrls,
+                'name' => $this->name,
+                'author' => $this->author,
+                'baseUrl' => $this->baseUrl,
+            ));
+            $path = $this->outputPath . '/atom.xml';
+            file_put_contents($path, $atomFeed);
+            echo PHP_EOL . "Atom feed generated to " . $path . ' ' . $this->baseUrl . '/' . basename($path);
+        }
 
         return true;
     }
