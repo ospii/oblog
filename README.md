@@ -3,7 +3,7 @@ Oblog - Markdown to HTML
 
 This is a simple Markdown + Twig => HTML + sitemap.xml script. It will read source markdown files from a directory, natural sort the files, pass them through Twig templates and write output into given directory.
 
-The script will also generate `sitemap.xml` for easier crawling/submission to search engines.
+The script will also generate a sitemap to `sitemap.xml` and atom feed to `atom.xml`.
 
 Usage
 -----
