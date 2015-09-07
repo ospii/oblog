@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
+  <link rel="self" type="application/atom+xml" href="{{ baseUrl }}/atom.xml"/>
   <id>{{ baseUrl }}</id>
   <title>{{ name }}</title>
   <updated>{{ "now"|date('c') }}</updated>
@@ -14,6 +15,7 @@
 {% for url in urls %}
     <entry>
         <id>{{ url.loc}}</id>
+        <link rel="alternate" type="text/html" href="{{ url.loc }}"/>
         <updated>{{ url.updated }}</updated>
         <title>{{ url.title }}</title>
     </entry>
