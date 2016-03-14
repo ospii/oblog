@@ -4,34 +4,39 @@ namespace Oblog;
 class Blog
 {
     /**
-     * @var Source of MD files.
+     * @var string Source of MD files.
      */
     private $sourcePath;
 
     /**
-     * @var Output path.
+     * @var string Output path.
      */
     private $outputPath;
 
     /**
-     * @var Twig template path
+     * @var string Twig template path
      */
     private $templatePath;
 
     /**
-     * @var Base url for site.
+     * @var string Base url for site.
      */
     private $baseUrl;
 
     /**
-     * @var Name of the blog/site
+     * @var string Name of the blog/site
      */
     private $name;
 
     /**
-     * @var Info for atom feed's author section
+     * @var array Info for atom feed's author section
      */
     private $author = array('name' => null, 'email' => null);
+
+    /**
+     * @var string Description for the site
+     */
+    private $description;
 
     /**
      * @param $baseUrl Base url for the site eg. http://example.com or http://example.com/blog
@@ -97,6 +102,17 @@ class Blog
     {
         $this->author['name'] = $name;
         $this->author['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * @param string $description Description for the site
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -198,7 +214,7 @@ class Blog
             }
         }
 
-        $atomUrls = $siteMapUrls;
+        $feedUrls = $siteMapUrls;
         if ($lastPostKey !== false) {
             $siteMapUrls[] = array(
                 'loc'        => $this->baseUrl . '/',
@@ -219,7 +235,7 @@ class Blog
 
         if ($twigLoader->exists('atom.xml')) {
             $atomFeed = $twig->render('atom.xml', array(
-                'urls' => $atomUrls,
+                'urls' => $feedUrls,
                 'name' => $this->name,
                 'author' => $this->author,
                 'baseUrl' => $this->baseUrl,
@@ -227,6 +243,19 @@ class Blog
             $path = $this->outputPath . '/atom.xml';
             file_put_contents($path, $atomFeed);
             echo PHP_EOL . "Atom feed generated to " . $path . ' ' . $this->baseUrl . '/' . basename($path);
+        }
+
+        if ($twigLoader->exists('rss.xml')) {
+            $atomFeed = $twig->render('rss.xml', array(
+                'urls' => $feedUrls,
+                'name' => $this->name,
+                'author' => $this->author,
+                'baseUrl' => $this->baseUrl,
+                'description' => $this->description,
+            ));
+            $path = $this->outputPath . '/rss.xml';
+            file_put_contents($path, $atomFeed);
+            echo PHP_EOL . "RSS feed generated to " . $path . ' ' . $this->baseUrl . '/' . basename($path);
         }
 
         return true;

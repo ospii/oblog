@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <atom:link href="{{ baseUrl }}/rss.xml" rel="self" type="application/rss+xml" />
+  <link>{{ baseUrl }}</link>
+  <title>{{ name }}</title>
+  <description>{{ description }}</description>
+  <lastBuildDate>{{ "now"|date('r') }}</lastBuildDate>
+{% if author.email is defined %}
+  <managingEditor>{{ author.email }}{% if author.email is defined %} ({{ author.email }}){% endif %}</managingEditor>
+{% endif %}
+{% for url in urls %}
+  <item>
+    <link>{{ url.loc }}</link>
+    <pubDate>{{ url.updated|date('r')}}</pubDate>
+    <title>{{ url.title }}</title>
+  </item>
+{% endfor %}
+</channel>
+</rss>

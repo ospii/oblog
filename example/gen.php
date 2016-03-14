@@ -11,6 +11,7 @@ if (php_sapi_name() === 'cli') {
         ->setTemplatePath(__DIR__ . '/template')
         ->setBaseUrl('http://example.com')
         ->setName('Example Blog')
+        ->setDescription('This is a description')
         ->setAuthor('John Example', 'john@example.org')
         ->generateStaticPosts();
 }
