@@ -7,7 +7,7 @@
   <description>{{ description }}</description>
   <lastBuildDate>{{ "now"|date('r') }}</lastBuildDate>
 {% if author.email is defined %}
-  <managingEditor>{{ author.email }}{% if author.email is defined %} ({{ author.email }}){% endif %}</managingEditor>
+  <managingEditor>{{ author.name }}{% if author.email is defined %} ({{ author.email }}){% endif %}</managingEditor>
 {% endif %}
 {% for url in urls %}
   <item>
