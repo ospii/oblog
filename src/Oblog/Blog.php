@@ -179,6 +179,7 @@ class Blog
                 'title'      => $post->getTitle(),
                 'modifiedAt' => $post->getModifiedAt(),
                 'post'       => $post->getHtml(),
+                'filename'   => $post->getHtmlFilename(),
             ));
 
             $pageVariables = array(
