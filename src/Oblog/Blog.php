@@ -186,6 +186,7 @@ class Blog
                 'links' => $links,
                 'title' => $post->getTitle(),
                 'baseUrl' => $this->baseUrl,
+                'filename' => $post->getHtmlFilename(),
             );
 
             if ($key == $lastPostKey) {
