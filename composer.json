@@ -2,9 +2,9 @@
   "name" : "ospii/oblog",
   "description" : "Simple php blog, Markdown + Twig => HTML + sitemap.xml",
   "require" : {
-    "php" : ">=5.3.0",
-    "michelf/php-markdown" : "1.4.*@dev",
-    "twig/twig" : "1.*"
+    "php" : ">=8.1.0",
+    "michelf/php-markdown" : "2.0.0",
+    "twig/twig" : "3.7.1"
   },
   "authors" : [ {
     "name" : "Jesse Sandberg",

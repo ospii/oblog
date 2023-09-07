@@ -1,5 +1,10 @@
 <?php
+
 namespace Oblog;
+
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Loader\FilesystemLoader;
 
 class Blog
 {
@@ -166,11 +171,13 @@ class Blog
         }
 
         foreach (glob($this->outputPath . '/*.html') as $htmlFile) {
-           unlink($htmlFile);
+            if (strstr(file_get_contents($htmlFile), '<meta name="generator" content="ospii/oblog">') !== false) {
+                unlink($htmlFile);
+            }
         }
 
-        $twigLoader = new \Twig_Loader_Filesystem($this->templatePath);
-        $twig = new \Twig_Environment($twigLoader);
+        $twigLoader = new FilesystemLoader($this->templatePath);
+        $twig = new Environment($twigLoader);
 
         $siteMapUrls = array();
         /* @var $post \Oblog\Post */
@@ -210,7 +217,7 @@ class Blog
                     'lastmod' => date('Y-m-d', $post->getModifiedAt()),
                     'title' => $post->getTitle(),
                     'updated' => date('c', $post->getModifiedAt()),
-                    );
+                );
             } else {
                 echo PHP_EOL . 'DRAFT at ' . $this->baseUrl . '/' . $outputFilename;
             }
@@ -223,9 +230,8 @@ class Blog
                 'priority'   => '1',
                 'lastmod'    => date('Y-m-d', $posts[$lastPostKey]->getModifiedAt()),
                 'changefreq' => 'daily',
-             );
+            );
         }
-
         if ($twigLoader->exists('sitemap.xml')) {
             $sitemapXml = $twig->render('sitemap.xml', array(
                 'urls' => $siteMapUrls,
@@ -259,8 +265,6 @@ class Blog
             file_put_contents($path, $atomFeed);
             echo PHP_EOL . "RSS feed generated to " . $path . ' ' . $this->baseUrl . '/' . basename($path);
         }
-
         return true;
     }
 }
-
